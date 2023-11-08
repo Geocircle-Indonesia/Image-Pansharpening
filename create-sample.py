@@ -4,6 +4,7 @@ from rasterio.transform import from_origin
 from rasterio.enums import Resampling
 from rasterio.windows import Window
 
+# Create a function to read 4 bands and 1 bands image. Store as numpy array
 def read_images(multispectral, panchromatic):
     with rasterio.open(multispectral) as src:
         multispectral_image = src.read()
@@ -13,6 +14,8 @@ def read_images(multispectral, panchromatic):
 
     return multispectral_image, panchromatic_image
 
+
+# Create a function to cut the array into particular size and save as tif image using looping and sliding windows technique
 def save_tif_from_array(array, output_path, window_size):
     height, width = array.shape[1:]
 
