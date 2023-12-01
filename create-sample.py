@@ -69,7 +69,7 @@ if __name__ == "__main__":
     multispectral_array, panchromatic_array = read_images(multispectral_path, panchromatic_path)
     for _, coordinates in sliding_window(panchromatic_array, window_size):
         start_x, start_y, end_x, end_y = coordinates
-        cropped_ms = multispectral_array[start_y:end_y, start_x:end_x, :3]
+        cropped_ms = multispectral_array[start_y:end_y, start_x:end_x, :]
         cropped_p = panchromatic_array[start_y:end_y, start_x:end_x,:]
        # print(cropped_ms.shape, type(cropped_p))
         key = generate_random_key_value()
