@@ -2,3 +2,8 @@ DATA/MS/*
 DATA/P/*
 DATA/PAN/*
 SPOT_RENDER/
+build
+dist
+create-sample.spec
+.gitignore
+DATA/*
