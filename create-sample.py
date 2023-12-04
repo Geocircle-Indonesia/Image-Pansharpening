@@ -7,7 +7,7 @@ from PIL import Image
 from skimage import exposure
 
 # Create a function to read 4 bands and 1 bands image. Store as numpy array
-def read_images(multispectral, panchromatic):
+def read_images(multispectral, panchromatic, pansharpen):
     
     with rasterio.open(panchromatic) as src_p:
         panchromatic_image = src_p.read()
@@ -22,7 +22,11 @@ def read_images(multispectral, panchromatic):
         #multispectral_image = multispectral_image.astype(np.uint8)
         multispectral_image = np.transpose(multispectral_image, (1, 2, 0))
 
-    return multispectral_image, panchromatic_image
+    with rasterio.open(pansharpen) as src_pan:
+        pansharpen_image = src_pan.read()
+        pansharpen_image = np.transpose(pansharpen_image, (1, 2, 0))
+
+    return multispectral_image, panchromatic_image, pansharpen_image
 
 def sliding_window(image, window_size):
     height, width = image.shape[:2]
@@ -62,17 +66,20 @@ def export_array_to_image(array, output_path):
 
 
 if __name__ == "__main__":
-    multispectral_path = "./SPOT_RENDER/MS4_1/MS4_1.tif"
-    panchromatic_path = "./SPOT_RENDER/P_1.tif"
+    multispectral_path = "./SPOT_RENDER/MS_1/MS_1.tif"
+    panchromatic_path = "./SPOT_RENDER/P_1/P_1.tif"
+    pansharpen_path = "./SPOT_RENDER/PAN_1/PAN_1.tif"
     window_size = (1000,1000)
 
-    multispectral_array, panchromatic_array = read_images(multispectral_path, panchromatic_path)
+    multispectral_array, panchromatic_array, pansharpen_array = read_images(multispectral_path, panchromatic_path, pansharpen_path)
     for _, coordinates in sliding_window(panchromatic_array, window_size):
         start_x, start_y, end_x, end_y = coordinates
         cropped_ms = multispectral_array[start_y:end_y, start_x:end_x, :]
         cropped_p = panchromatic_array[start_y:end_y, start_x:end_x,:]
+        cropped_pan = pansharpen_array[start_y:end_y, start_x:end_x,:]
        # print(cropped_ms.shape, type(cropped_p))
         key = generate_random_key_value()
         export_array_to_image(cropped_ms, f'./DATA/MS/MS_{key}.tif')
         export_array_to_image(cropped_p, f'./DATA/P/P_{key}.tif')
+        export_array_to_image(cropped_pan, f'./DATA/PAN/PAN_{key}.tif')
         print(key)
