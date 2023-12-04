@@ -23,7 +23,10 @@ def read_images(multispectral, panchromatic, pansharpen):
         multispectral_image = np.transpose(multispectral_image, (1, 2, 0))
 
     with rasterio.open(pansharpen) as src_pan:
-        pansharpen_image = src_pan.read()
+        pansharpen_image = src_pan.read(
+            out_shape=(src_pan.count, src_p.height, src_p.width),
+            resampling=Resampling.nearest
+        )
         pansharpen_image = np.transpose(pansharpen_image, (1, 2, 0))
 
     return multispectral_image, panchromatic_image, pansharpen_image
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     multispectral_path = "./SPOT_RENDER/MS_1/MS_1.tif"
     panchromatic_path = "./SPOT_RENDER/P_1/P_1.tif"
     pansharpen_path = "./SPOT_RENDER/PAN_1/PAN_1.tif"
-    window_size = (1000,1000)
+    window_size = (256,256)
 
     multispectral_array, panchromatic_array, pansharpen_array = read_images(multispectral_path, panchromatic_path, pansharpen_path)
     for _, coordinates in sliding_window(panchromatic_array, window_size):
