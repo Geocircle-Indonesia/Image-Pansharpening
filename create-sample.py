@@ -10,7 +10,7 @@ from rasterio.transform import from_origin
 from rasterio.enums import Resampling
 from PIL import Image
 from skimage import exposure
-import subprocess
+import threading
 
 class ImageProcessorApp:
     def __init__(self, master):
@@ -138,9 +138,6 @@ class ImageProcessorApp:
 
                 print(f"Processed image with key: {key}. Exported to {export_folder}")
 
-                subprocess.run(["echo", f"Processed image with key: {key}. Exported to {export_folder}"])
-
-            subprocess.run(["echo", "Proses selesai!"])
             # Show popup message
             messagebox.showinfo("Selesai", "Proses selesai!")
 
@@ -148,6 +145,13 @@ class ImageProcessorApp:
             self.reset_application()
         else:
             messagebox.showerror("Error", "Mohon pilih semua gambar input.")
+
+    def run_process_images(self):
+        if self.export_folder_var.get():
+            thread = threading.Thread(target=self.process_images)
+            thread.start()
+        else:
+            messagebox.showinfo("Info", "Harap tentukan direktori keluaran.")
 
     def reset_application(self):
         # Reset all file paths
