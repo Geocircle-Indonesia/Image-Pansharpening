@@ -10,6 +10,7 @@ from rasterio.transform import from_origin
 from rasterio.enums import Resampling
 from PIL import Image
 from skimage import exposure
+import subprocess
 
 class ImageProcessorApp:
     def __init__(self, master):
@@ -137,6 +138,9 @@ class ImageProcessorApp:
 
                 print(f"Processed image with key: {key}. Exported to {export_folder}")
 
+                subprocess.run(["echo", f"Processed image with key: {key}. Exported to {export_folder}"])
+
+            subprocess.run(["echo", "Proses selesai!"])
             # Show popup message
             messagebox.showinfo("Selesai", "Proses selesai!")
 
