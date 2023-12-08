@@ -228,7 +228,7 @@ class ImageProcessorApp:
             width=width,
             count=bands,
             dtype=array.dtype,
-            crs=projection,
+            #crs=projection,
         ) as dst:
             # Write the array data to the GeoTIFF bands
             for band in range(bands):

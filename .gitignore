@@ -7,3 +7,4 @@ dist
 create-sample.spec
 .gitignore
 DATA/*
+CITRA/*
