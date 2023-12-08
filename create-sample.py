@@ -147,7 +147,7 @@ class ImageProcessorApp:
             messagebox.showerror("Error", "Mohon pilih semua gambar input.")
 
     def run_process_images(self):
-        if self.outputdir.get():
+        if self.export_folder_var.get():
             thread = threading.Thread(target=self.process_images)
             thread.start()
         else:
