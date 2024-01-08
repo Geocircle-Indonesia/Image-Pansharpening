@@ -200,7 +200,9 @@ class ImageProcessorApp:
         for y in range(0, height - window_height + 1, window_height):
             for x in range(0, width - window_width + 1, window_width):
                 window = image[y:y + window_height, x:x + window_width]
-                yield window, (x, y, x + window_width, y + window_height)
+
+                if np.any(window != 0):
+                    yield window, (x, y, x + window_width, y + window_height)
 
     def generate_random_key_value(self):
         # Generate a random key using UUID
